@@ -31,14 +31,13 @@ net = cv2.dnn.readNetFromDarknet(config_path, weights_path)
 
 image_name = args['image']
 image = cv2.imread(image_name)
-new_size = (416, 416)
-resized = cv2.resize(image, new_size)
 filename, ext = os.path.basename(image_name).split('.')
 
 # normalize, scale, and reshape the image
 (h, w) = image.shape[:2]
 scale_factor = 1/255.0
-blob = cv2.dnn.blobFromImage(resized, scale_factor, new_size, swapRB=True, crop=False) # 4D blob 
+new_size = (416, 416)
+blob = cv2.dnn.blobFromImage(image, scale_factor, new_size, swapRB=True, crop=False) # 4D blob 
 
 # print('image.shape:', image.shape)
 # print('blob.shape:', blob.shape)
@@ -83,8 +82,8 @@ nmsboxes = cv2.dnn.NMSBoxes(boxes, confidences, args['confidence'], args['thresh
 
 # draw a bounding box rectangle and label on the image 
 font = cv2.FONT_HERSHEY_SIMPLEX
-font_scale = 1
-thickness = 1
+font_scale = .5
+thickness = 2
 if len(nmsboxes) > 0:
     for i in nmsboxes.flatten():
         x, y = boxes[i][0], boxes[i][1]
@@ -96,11 +95,10 @@ if len(nmsboxes) > 0:
         (text_width, text_height) = cv2.getTextSize(text, font, fontScale=font_scale, thickness=thickness)[0]
         text_offset_x = x
         text_offset_y = y - 5
-        box_coords = ((text_offset_x, text_offset_y), (text_offset_x + text_width + 2, text_offset_y - text_height))
+        box_coords = ((text_offset_x, text_offset_y), (text_offset_x + text_width + 2, text_offset_y + text_height))
+        cv2.rectangle(image, box_coords[0], box_coords[1], color=color, thickness=cv2.FILLED)
         overlay = image.copy()
-        cv2.rectangle(overlay, box_coords[0], box_coords[1], color=color, thickness=cv2.FILLED)
         image = cv2.addWeighted(overlay, 0.6, image, 0.4, 0) # add opacity (transparency to the box)
-        # put the text
         cv2.putText(image, text, (text_offset_x, text_offset_y), font,
             fontScale=font_scale, color=(0, 0, 0), thickness=thickness)
 
