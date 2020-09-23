@@ -1,2 +1,5 @@
 *.weights
 __pycache__
+*.pt
+*.pth
+MNIST
