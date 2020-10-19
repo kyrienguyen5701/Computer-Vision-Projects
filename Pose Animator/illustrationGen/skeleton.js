@@ -28,85 +28,173 @@ const MIN_FACE_SCORE = 0.8;
 //     'leftEar', 'rightEar'];
 const posePartNames = ['leftEar', 'rightEar']
 
+// // Mapping between face part names and their vertex indices in TF face mesh.
+// export const facePartName2Index = {
+//     'topMid': 10,
+//     'rightTop0': 67,
+//     'rightTop1': 54,
+//     'leftTop0': 297,
+//     'leftTop1': 284,
+//     'rightJaw0': 21,
+//     'rightJaw1': 162,
+//     'rightJaw2': 127, 
+//     'rightJaw3': 234,
+//     'rightJaw4': 132, 
+//     'rightJaw5': 172, 
+//     'rightJaw6': 150,
+//     'rightJaw7': 176,
+//     'jawMid': 152,   // 0 - 8
+//     'leftJaw7': 400, 
+//     'leftJaw6': 379, 
+//     'leftJaw5': 397, 
+//     'leftJaw4': 361,
+//     'leftJaw3': 454,
+//     'leftJaw2': 356,
+//     'leftJaw1': 389,
+//     'leftJaw0': 251, // 9 - 16
+//     'rightBrow0': 46, 
+//     'rightBrow1': 53, 
+//     'rightBrow2': 52,
+//     'rightBrow3': 65,
+//     'rightBrow4': 55, // 17 - 21
+//     'leftBrow4': 285,
+//     'leftBrow3': 295, 
+//     'leftBrow2': 282,
+//     'leftBrow1': 283,
+//     'leftBrow0': 276, // 22 - 26
+//     'nose0': 6,
+//     'nose1': 197,
+//     'nose2': 195,
+//     'nose3': 5, // 27 - 30
+//     'rightNose0': 48,
+//     'rightNose1': 220,
+//     'nose4': 4, 
+//     'leftNose1': 440,
+//     'leftNose0': 278, // 31 - 35
+//     'rightEye0': 33,
+//     'rightEye1': 160,
+//     'rightEye2': 158,
+//     'rightEye3': 133,
+//     'rightEye4': 153,
+//     'rightEye5': 144, // 36 - 41
+//     'leftEye3': 362,
+//     'leftEye2': 385,
+//     'leftEye1': 387,
+//     'leftEye0': 263,
+//     'leftEye5': 373, 
+//     'leftEye4': 380, // 42 - 47
+//     'rightMouthCorner': 61,
+//     'rightUpperLipTop0': 40,
+//     'rightUpperLipTop1': 37,
+//     'upperLipTopMid': 0,
+//     'leftUpperLipTop1': 267,
+//     'leftUpperLipTop0': 270,
+//     'leftMouthCorner': 291, // 48 - 54
+//     'leftLowerLipBottom0': 321,
+//     'leftLowerLipBottom1': 314,
+//     'lowerLipBottomMid': 17,
+//     'rightLowerLipBottom1': 84,
+//     'rightLowerLipBottom0': 91, // 55 - 59
+//     'rightMiddleLip': 78,
+//     'rightUpperLipBottom1': 81,
+//     'upperLipBottomMid': 13,
+//     'leftUpperLipBottom1': 311,
+//     'leftMiddleLip': 308, // 60 - 64
+//     'leftLowerLipTop0': 402, 
+//     'lowerLipTopMid': 14,
+//     'rightLowerLipTop0': 178, // 65 - 67
+// };
+
+// const facePartNames = [
+//     'topMid', 'rightTop0', 'rightTop1', 'leftTop0', 'leftTop1',
+//     'rightJaw0', 'rightJaw1', 'rightJaw2', 'rightJaw3', 'rightJaw4', 'rightJaw5', 'rightJaw6', 'rightJaw7', 'jawMid',   // 0 - 8
+//     'leftJaw7', 'leftJaw6', 'leftJaw5', 'leftJaw4', 'leftJaw3', 'leftJaw2', 'leftJaw1', 'leftJaw0', // 9 - 16
+//     'rightBrow0', 'rightBrow1', 'rightBrow2', 'rightBrow3', 'rightBrow4', // 17 - 21
+//     'leftBrow4', 'leftBrow3', 'leftBrow2', 'leftBrow1', 'leftBrow0', // 22 - 26
+//     'nose0', 'nose1', 'nose2', 'nose3', // 27 - 30
+//     'rightNose0', 'rightNose1', 'nose4', 'leftNose1', 'leftNose0', // 31 - 35
+//     'rightEye0', 'rightEye1', 'rightEye2', 'rightEye3', 'rightEye4', 'rightEye5', // 36 - 41
+//     'leftEye3', 'leftEye2', 'leftEye1', 'leftEye0', 'leftEye5', 'leftEye4', // 42 - 47
+//     'rightMouthCorner', 'rightUpperLipTop0', 'rightUpperLipTop1', 'upperLipTopMid', 'leftUpperLipTop1', 'leftUpperLipTop0', 'leftMouthCorner', // 48 - 54
+//     'leftLowerLipBottom0', 'leftLowerLipBottom1', 'lowerLipBottomMid', 'rightLowerLipBottom1', 'rightLowerLipBottom0', // 55 - 59
+//     'rightMiddleLip', 'rightUpperLipBottom1', 'upperLipBottomMid', 'leftUpperLipBottom1', 'leftMiddleLip', // 60 - 64
+//     'leftLowerLipTop0', 'lowerLipTopMid', 'rightLowerLipTop0', // 65 - 67
+// ];
+
 // Mapping between face part names and their vertex indices in TF face mesh.
 export const facePartName2Index = {
-    'topMid': 10,
-    'rightTop0': 67,
-    'rightTop1': 54,
-    'leftTop0': 297,
-    'leftTop1': 284,
-    'rightJaw0': 21,
-    'rightJaw1': 162,
-    'rightJaw2': 127, 
-    'rightJaw3': 234,
-    'rightJaw4': 132, 
-    'rightJaw5': 172, 
-    'rightJaw6': 150,
-    'rightJaw7': 176,
-    'jawMid': 152,   // 0 - 8
-    'leftJaw7': 400, 
-    'leftJaw6': 379, 
-    'leftJaw5': 397, 
-    'leftJaw4': 361,
-    'leftJaw3': 454,
-    'leftJaw2': 356,
-    'leftJaw1': 389,
-    'leftJaw0': 251, // 9 - 16
-    'rightBrow0': 46, 
-    'rightBrow1': 53, 
-    'rightBrow2': 52,
-    'rightBrow3': 65,
-    'rightBrow4': 55, // 17 - 21
-    'leftBrow4': 285,
-    'leftBrow3': 295, 
-    'leftBrow2': 282,
-    'leftBrow1': 283,
-    'leftBrow0': 276, // 22 - 26
-    'nose0': 6,
-    'nose1': 197,
-    'nose2': 195,
-    'nose3': 5, // 27 - 30
-    'rightNose0': 48,
-    'rightNose1': 220,
-    'nose4': 4, 
-    'leftNose1': 440,
-    'leftNose0': 278, // 31 - 35
-    'rightEye0': 33,
-    'rightEye1': 160,
-    'rightEye2': 158,
-    'rightEye3': 133,
-    'rightEye4': 153,
-    'rightEye5': 144, // 36 - 41
-    'leftEye3': 362,
-    'leftEye2': 385,
-    'leftEye1': 387,
-    'leftEye0': 263,
-    'leftEye5': 373, 
-    'leftEye4': 380, // 42 - 47
-    'rightMouthCorner': 61,
-    'rightUpperLipTop0': 40,
-    'rightUpperLipTop1': 37,
-    'upperLipTopMid': 0,
-    'leftUpperLipTop1': 267,
-    'leftUpperLipTop0': 270,
-    'leftMouthCorner': 291, // 48 - 54
-    'leftLowerLipBottom0': 321,
-    'leftLowerLipBottom1': 314,
-    'lowerLipBottomMid': 17,
-    'rightLowerLipBottom1': 84,
-    'rightLowerLipBottom0': 91, // 55 - 59
-    'rightMiddleLip': 78,
-    'rightUpperLipBottom1': 81,
-    'upperLipBottomMid': 13,
-    'leftUpperLipBottom1': 311,
-    'leftMiddleLip': 308, // 60 - 64
-    'leftLowerLipTop0': 402, 
-    'lowerLipTopMid': 14,
-    'rightLowerLipTop0': 178, // 65 - 67
+    'rightJaw0': 0,
+    'rightJaw1': 1,
+    'rightJaw2': 2, 
+    'rightJaw3': 3,
+    'rightJaw4': 4, 
+    'rightJaw5': 5, 
+    'rightJaw6': 6,
+    'rightJaw7': 7,
+    'jawMid': 8,   // 0 - 8
+    'leftJaw7': 9, 
+    'leftJaw6': 10, 
+    'leftJaw5': 11, 
+    'leftJaw4': 12,
+    'leftJaw3': 13,
+    'leftJaw2': 14,
+    'leftJaw1': 15,
+    'leftJaw0': 16, // 9 - 16
+    'rightBrow0': 17, 
+    'rightBrow1': 18, 
+    'rightBrow2': 19,
+    'rightBrow3': 20,
+    'rightBrow4': 21, // 17 - 21
+    'leftBrow4': 22,
+    'leftBrow3': 23, 
+    'leftBrow2': 24,
+    'leftBrow1': 25,
+    'leftBrow0': 26, // 22 - 26
+    'nose0': 27,
+    'nose1': 28,
+    'nose2': 29,
+    'nose3': 30, // 27 - 30
+    'rightNose0': 31,
+    'rightNose1': 32,
+    'nose4': 33, 
+    'leftNose1': 34,
+    'leftNose0': 35, // 31 - 35
+    'rightEye0': 36,
+    'rightEye1': 37,
+    'rightEye2': 38,
+    'rightEye3': 39,
+    'rightEye4': 40,
+    'rightEye5': 41, // 36 - 41
+    'leftEye3': 42,
+    'leftEye2': 43,
+    'leftEye1': 44,
+    'leftEye0': 45,
+    'leftEye5': 46, 
+    'leftEye4': 47, // 42 - 47
+    'rightMouthCorner': 48,
+    'rightUpperLipTop0': 49,
+    'rightUpperLipTop1': 50,
+    'upperLipTopMid': 51,
+    'leftUpperLipTop1': 52,
+    'leftUpperLipTop0': 53,
+    'leftMouthCorner': 54, // 48 - 54
+    'leftLowerLipBottom0': 55,
+    'leftLowerLipBottom1': 56,
+    'lowerLipBottomMid': 57,
+    'rightLowerLipBottom1': 58,
+    'rightLowerLipBottom0': 59, // 55 - 59
+    'rightMiddleLip': 60,
+    'rightUpperLipBottom1': 61,
+    'upperLipBottomMid': 62,
+    'leftUpperLipBottom1': 63,
+    'leftMiddleLip': 64, // 60 - 64
+    'leftLowerLipTop0': 65, 
+    'lowerLipTopMid': 66,
+    'rightLowerLipTop0': 67, // 65 - 67
 };
 
 const facePartNames = [
-    'topMid', 'rightTop0', 'rightTop1', 'leftTop0', 'leftTop1',
+    // 'topMid', 'rightTop0', 'rightTop1', 'leftTop0', 'leftTop1',
     'rightJaw0', 'rightJaw1', 'rightJaw2', 'rightJaw3', 'rightJaw4', 'rightJaw5', 'rightJaw6', 'rightJaw7', 'jawMid',   // 0 - 8
     'leftJaw7', 'leftJaw6', 'leftJaw5', 'leftJaw4', 'leftJaw3', 'leftJaw2', 'leftJaw1', 'leftJaw0', // 9 - 16
     'rightBrow0', 'rightBrow1', 'rightBrow2', 'rightBrow3', 'rightBrow4', // 17 - 21
@@ -193,7 +281,7 @@ function getPartFromPose(pose, name) {
 }
 
 function getKeypointFromFaceFrame(face, i) {
-    if (!face || !face.scaledMesh || !face.scaledMesh.length);
+    if (!face || !face.landmarks._positions || !face.landmarks._positions.length);
     return new paper.default.Point(face.positions[i * 2], face.positions[i * 2 + 1]);
 }
 
@@ -216,11 +304,11 @@ export class Skeleton {
         // let rightShoulder = getKeyPointFromSVG(skeletonGroup, 'rightShoulder');
 
         // Face
-        let topMid = getKeyPointFromSVG(skeletonGroup, 'topMid');
-        let rightTop0 = getKeyPointFromSVG(skeletonGroup, 'rightTop0');
-        let rightTop1 = getKeyPointFromSVG(skeletonGroup, 'rightTop1');
-        let leftTop0 = getKeyPointFromSVG(skeletonGroup, 'leftTop0');
-        let leftTop1 = getKeyPointFromSVG(skeletonGroup, 'leftTop1');
+        // let topMid = getKeyPointFromSVG(skeletonGroup, 'topMid');
+        // let rightTop0 = getKeyPointFromSVG(skeletonGroup, 'rightTop0');
+        // let rightTop1 = getKeyPointFromSVG(skeletonGroup, 'rightTop1');
+        // let leftTop0 = getKeyPointFromSVG(skeletonGroup, 'leftTop0');
+        // let leftTop1 = getKeyPointFromSVG(skeletonGroup, 'leftTop1');
         let leftJaw2 = getKeyPointFromSVG(skeletonGroup, 'leftJaw2');
         let leftJaw3 = getKeyPointFromSVG(skeletonGroup, 'leftJaw3');
         let leftJaw4 = getKeyPointFromSVG(skeletonGroup, 'leftJaw4');
@@ -299,18 +387,18 @@ export class Skeleton {
         // this.bRightHipRightKnee = new Bone().set(rightHip, rightKnee, this, 'body');
         // this.bRightKneeRightAnkle = new Bone().set(rightKnee, rightAnkle, this, 'body');
 
-        this.bTopMidRightTop0 = new Bone().set(topMid, rightTop0, this, 'face');
-        this.bTopMidLeftTop0 = new Bone().set(topMid, leftTop0, this, 'face');
-        this.bLeftTop0LeftTop1 = new Bone().set(leftTop0, leftTop1, this, 'face');
-        this.bLeftTop1LeftJaw2 = new Bone().set(leftTop1, leftJaw2, this, 'face');
+        // this.bTopMidRightTop0 = new Bone().set(topMid, rightTop0, this, 'face');
+        // this.bTopMidLeftTop0 = new Bone().set(topMid, leftTop0, this, 'face');
+        // this.bLeftTop0LeftTop1 = new Bone().set(leftTop0, leftTop1, this, 'face');
+        // this.bLeftTop1LeftJaw2 = new Bone().set(leftTop1, leftJaw2, this, 'face');
         this.bLeftJaw2LeftJaw3 = new Bone().set(leftJaw2, leftJaw3, this, 'face');
         this.bLeftJaw3LeftJaw4 = new Bone().set(leftJaw3, leftJaw4, this, 'face');
         this.bLeftJaw4LeftJaw5 = new Bone().set(leftJaw4, leftJaw5, this, 'face');
         this.bLeftJaw5LeftJaw6 = new Bone().set(leftJaw5, leftJaw6, this, 'face');
         this.bLeftJaw6LeftJaw7 = new Bone().set(leftJaw6, leftJaw7, this, 'face');
         this.bLeftJaw7JawMid = new Bone().set(leftJaw7, jawMid, this, 'face');
-        this.bRightTop0RightTop1 = new Bone().set(rightTop0, rightTop1, this, 'face');
-        this.bRightTop1RightJaw2 = new Bone().set(rightTop1, rightJaw2, this, 'face');
+        // this.bRightTop0RightTop1 = new Bone().set(rightTop0, rightTop1, this, 'face');
+        // this.bRightTop1RightJaw2 = new Bone().set(rightTop1, rightJaw2, this, 'face');
         this.bRightJaw2RightJaw3 = new Bone().set(rightJaw2, rightJaw3, this, 'face');
         this.bRightJaw3RightJaw4 = new Bone().set(rightJaw3, rightJaw4, this, 'face');
         this.bRightJaw4RightJaw5 = new Bone().set(rightJaw4, rightJaw5, this, 'face');
@@ -370,18 +458,18 @@ export class Skeleton {
 
         this.faceBones = [
             // Face
-            this.bTopMidRightTop0,
-            this.bRightTop0RightTop1,
-            this.bTopMidLeftTop0,
-            this.bLeftTop0LeftTop1,
-            this.bLeftTop1LeftJaw2,
+            // this.bTopMidRightTop0,
+            // this.bRightTop0RightTop1,
+            // this.bTopMidLeftTop0,
+            // this.bLeftTop0LeftTop1,
+            // this.bLeftTop1LeftJaw2,
             this.bLeftJaw2LeftJaw3,
             this.bLeftJaw3LeftJaw4,
             this.bLeftJaw4LeftJaw5,
             this.bLeftJaw5LeftJaw6,
             this.bLeftJaw6LeftJaw7,
             this.bLeftJaw7JawMid,
-            this.bRightTop1RightJaw2,
+            // this.bRightTop1RightJaw2,
             this.bRightJaw2RightJaw3,
             this.bRightJaw3RightJaw4,
             this.bRightJaw4RightJaw5,
@@ -553,7 +641,7 @@ export class Skeleton {
     updateFaceParts(face) {
         let posLeftEar = this.parts['leftEar'].position;
         let posRightEar = this.parts['rightEar'].position;
-        if (face && face.positions && face.positions.length && face.faceInViewConfidence > MIN_FACE_SCORE) {
+        if (face && face.positions && face.positions.length && face.detection.classScore > MIN_FACE_SCORE) {
             // Valid face results.
             for (let i = 0; i < facePartNames.length; i++) {
                 let partName = facePartNames[i];
@@ -561,7 +649,7 @@ export class Skeleton {
                 if (!pos) continue;
                 this.parts[partName] = {
                     position: pos,
-                    score: face.faceInViewConfidence
+                    score: face.landmarks._positions
                 };
             }
             // Keep track of the transformation from pose ear positions to face ear positions.
@@ -685,9 +773,9 @@ export class Skeleton {
         Object.keys(facePartName2Index).forEach(partName => {
             if (partName.startsWith('left')) {
                 let rightName = 'right' + partName.substr('left'.length, partName.length);
-                let temp = face.scaledMesh[facePartName2Index[partName]];
-                face.scaledMesh[facePartName2Index[partName]] = face.scaledMesh[facePartName2Index[rightName]];
-                face.scaledMesh[facePartName2Index[rightName]] = temp;
+                let temp = face.landmarks._positions[facePartName2Index[partName]];
+                face.landmarks._positions[facePartName2Index[partName]] = face.landmarks._positions[facePartName2Index[rightName]];
+                face.landmarks._positions[facePartName2Index[rightName]] = temp;
             }
         });
     }
@@ -746,11 +834,11 @@ export class Skeleton {
     static toFaceFrame(faceDetection) {
         let frame = {
             positions: [],
-            faceInViewConfidence: faceDetection.faceInViewConfidence,
+            faceInViewConfidence: faceDetection.landmarks._positions,
         };
         for (let i = 0; i < facePartNames.length; i++) {
             let partName = facePartNames[i];
-            let p = faceDetection.scaledMesh[facePartName2Index[partName]];
+            let p = faceDetection.landmarks._positions[facePartName2Index[partName]];
             frame.positions.push(p[0]);
             frame.positions.push(p[1]);
         }

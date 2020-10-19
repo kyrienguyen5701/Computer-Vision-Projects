@@ -15,8 +15,10 @@
  * =============================================================================
  */
 
+// import '@tensorflow/tfjs-node'; // require Python
 import * as posenet_module from '@tensorflow-models/posenet';
 import * as facemesh_module from '@tensorflow-models/facemesh';
+import * as faceapi from 'face-api.js';
 import * as tf from '@tensorflow/tfjs';
 import * as paper from 'paper';
 import "babel-polyfill";
@@ -111,12 +113,16 @@ function drawResults(image, canvas, faceDetection, poses) {
     }
   });
   if (guiState.showKeypoints) {
-    faceDetection.forEach(face => {
-      Object.values(facePartName2Index).forEach(index => {
-          let p = face.scaledMesh[index];
-          drawPoint(ctx, p[1], p[0], 3, 'red');
-      });
-    });
+    // faceDetection.forEach(face => {
+    //   Object.values(facePartName2Index).forEach(index => {
+    //       let p = face.scaledMesh[index];
+    //       drawPoint(ctx, p[1], p[0], 3, 'red');
+    //   });
+    // });
+    Object.values(facePartName2Index).forEach(index => {
+      let p = faceDetection.landmarks._positions[index]
+      drawPoint(ctx, p._y, p._x, 3, 'red')
+    })
   }
 }
 
@@ -181,7 +187,8 @@ async function testImageAndEstimatePoses() {
 
   // Reload facemesh model to purge states from previous runs.
   facemesh = await facemesh_module.load();
-
+  await faceapi.nets.ssdMobilenetv1.loadFromUri('https://gitcdn.xyz/repo/justadudewhohacks/face-api.js/master/weights/')
+  await faceapi.nets.faceLandmark68Net.loadFromUri('https://gitcdn.xyz/repo/justadudewhohacks/face-api.js/master/weights/')
   // Load an example image
   setStatusText('Loading image...');
   sourceImage = await loadImage(sourceImages[guiState.sourceImage]);
@@ -196,6 +203,9 @@ async function testImageAndEstimatePoses() {
     nmsRadius: defaultNmsRadius,
   });
   faceDetection = await facemesh.estimateFaces(sourceImage, false, false);
+  console.log(faceDetection[0]);
+  faceDetection = await faceapi.detectSingleFace(sourceImage).withFaceLandmarks()
+  console.log(faceDetection);
 
   // Draw poses.
   drawDetectionResults();
