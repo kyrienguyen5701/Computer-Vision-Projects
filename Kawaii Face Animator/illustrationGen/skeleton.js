@@ -23,9 +23,10 @@ import { ColorUtils } from '../utils/colorUtils';
 const MIN_POSE_SCORE = 0.1;
 const MIN_FACE_SCORE = 0.8;
 
-const posePartNames = ['leftAnkle', 'leftKnee', 'leftHip', 'leftWrist', 'leftElbow', 'leftShoulder', 
-    'rightAnkle', 'rightKnee', 'rightHip', 'rightWrist', 'rightElbow', 'rightShoulder',
-    'leftEar', 'rightEar'];
+// const posePartNames = ['leftAnkle', 'leftKnee', 'leftHip', 'leftWrist', 'leftElbow', 'leftShoulder', 
+//     'rightAnkle', 'rightKnee', 'rightHip', 'rightWrist', 'rightElbow', 'rightShoulder',
+//     'leftEar', 'rightEar'];
+const posePartNames = ['leftShoulder', 'rightShoulder', 'leftEar', 'rightEar']
 
 // Mapping between face part names and their vertex indices in TF face mesh.
 export const facePartName2Index = {
@@ -200,17 +201,17 @@ export class Skeleton {
     constructor(scope) {
         let skeletonGroup = SVGUtils.findFirstItemWithPrefix(scope.project, 'skeleton');
         // Pose
-        let leftAnkle = getKeyPointFromSVG(skeletonGroup, 'leftAnkle');
-        let leftKnee = getKeyPointFromSVG(skeletonGroup, 'leftKnee');
-        let leftHip = getKeyPointFromSVG(skeletonGroup, 'leftHip');
-        let leftWrist = getKeyPointFromSVG(skeletonGroup, 'leftWrist');
-        let leftElbow = getKeyPointFromSVG(skeletonGroup, 'leftElbow');
+        // let leftAnkle = getKeyPointFromSVG(skeletonGroup, 'leftAnkle');
+        // let leftKnee = getKeyPointFromSVG(skeletonGroup, 'leftKnee');
+        // let leftHip = getKeyPointFromSVG(skeletonGroup, 'leftHip');
+        // let leftWrist = getKeyPointFromSVG(skeletonGroup, 'leftWrist');
+        // let leftElbow = getKeyPointFromSVG(skeletonGroup, 'leftElbow');
         let leftShoulder = getKeyPointFromSVG(skeletonGroup, 'leftShoulder');
-        let rightAnkle = getKeyPointFromSVG(skeletonGroup, 'rightAnkle');
-        let rightKnee = getKeyPointFromSVG(skeletonGroup, 'rightKnee');
-        let rightHip = getKeyPointFromSVG(skeletonGroup, 'rightHip');
-        let rightWrist = getKeyPointFromSVG(skeletonGroup, 'rightWrist');
-        let rightElbow = getKeyPointFromSVG(skeletonGroup, 'rightElbow');
+        // let rightAnkle = getKeyPointFromSVG(skeletonGroup, 'rightAnkle');
+        // let rightKnee = getKeyPointFromSVG(skeletonGroup, 'rightKnee');
+        // let rightHip = getKeyPointFromSVG(skeletonGroup, 'rightHip');
+        // let rightWrist = getKeyPointFromSVG(skeletonGroup, 'rightWrist');
+        // let rightElbow = getKeyPointFromSVG(skeletonGroup, 'rightElbow');
         let rightShoulder = getKeyPointFromSVG(skeletonGroup, 'rightShoulder');
 
         // Face
@@ -284,18 +285,20 @@ export class Skeleton {
         let leftLowerLipBottom1 = getKeyPointFromSVG(skeletonGroup, 'leftLowerLipBottom1');
         let lowerLipBottomMid = getKeyPointFromSVG(skeletonGroup, 'lowerLipBottomMid');
 
+        this.neckLength = jawMid.position.y - leftShoulder.position.y; // rightShoulder works as well
+
         this.bLeftShoulderRightShoulder = new Bone().set(leftShoulder, rightShoulder, this, 'body');
-        this.bRightShoulderRightHip = new Bone().set(rightShoulder, rightHip, this, 'body');
-        this.bLeftHipRightHip = new Bone().set(leftHip, rightHip, this, 'body');
-        this.bLeftShoulderLeftHip = new Bone().set(leftShoulder, leftHip, this, 'body');
-        this.bLeftShoulderLeftElbow = new Bone().set(leftShoulder, leftElbow, this, 'body');
-        this.bLeftElbowLeftWrist = new Bone().set(leftElbow, leftWrist, this, 'body');
-        this.bRightShoulderRightElbow = new Bone().set(rightShoulder, rightElbow, this, 'body');
-        this.bRightElbowRightWrist = new Bone().set(rightElbow, rightWrist, this, 'body');
-        this.bLeftHipLeftKnee = new Bone().set(leftHip, leftKnee, this, 'body');
-        this.bLeftKneeLeftAnkle = new Bone().set(leftKnee, leftAnkle, this, 'body');
-        this.bRightHipRightKnee = new Bone().set(rightHip, rightKnee, this, 'body');
-        this.bRightKneeRightAnkle = new Bone().set(rightKnee, rightAnkle, this, 'body');
+        // this.bRightShoulderRightHip = new Bone().set(rightShoulder, rightHip, this, 'body');
+        // this.bLeftHipRightHip = new Bone().set(leftHip, rightHip, this, 'body');
+        // this.bLeftShoulderLeftHip = new Bone().set(leftShoulder, leftHip, this, 'body');
+        // this.bLeftShoulderLeftElbow = new Bone().set(leftShoulder, leftElbow, this, 'body');
+        // this.bLeftElbowLeftWrist = new Bone().set(leftElbow, leftWrist, this, 'body');
+        // this.bRightShoulderRightElbow = new Bone().set(rightShoulder, rightElbow, this, 'body');
+        // this.bRightElbowRightWrist = new Bone().set(rightElbow, rightWrist, this, 'body');
+        // this.bLeftHipLeftKnee = new Bone().set(leftHip, leftKnee, this, 'body');
+        // this.bLeftKneeLeftAnkle = new Bone().set(leftKnee, leftAnkle, this, 'body');
+        // this.bRightHipRightKnee = new Bone().set(rightHip, rightKnee, this, 'body');
+        // this.bRightKneeRightAnkle = new Bone().set(rightKnee, rightAnkle, this, 'body');
 
         this.bTopMidRightTop0 = new Bone().set(topMid, rightTop0, this, 'face');
         this.bTopMidLeftTop0 = new Bone().set(topMid, leftTop0, this, 'face');
@@ -440,17 +443,17 @@ export class Skeleton {
         this.bodyBones = [
             // Body
             this.bLeftShoulderRightShoulder,
-            this.bRightShoulderRightHip,
-            this.bLeftHipRightHip,
-            this.bLeftShoulderLeftHip,
-            this.bLeftShoulderLeftElbow,
-            this.bLeftElbowLeftWrist,
-            this.bRightShoulderRightElbow,
-            this.bRightElbowRightWrist,
-            this.bLeftHipLeftKnee,
-            this.bLeftKneeLeftAnkle,
-            this.bRightHipRightKnee,
-            this.bRightKneeRightAnkle
+            // this.bRightShoulderRightHip,
+            // this.bLeftHipRightHip,
+            // this.bLeftShoulderLeftHip,
+            // this.bLeftShoulderLeftElbow,
+            // this.bLeftElbowLeftWrist,
+            // this.bRightShoulderRightElbow,
+            // this.bRightElbowRightWrist,
+            // this.bLeftHipLeftKnee,
+            // this.bLeftKneeLeftAnkle,
+            // this.bRightHipRightKnee,
+            // this.bRightKneeRightAnkle
         ];
         this.bones = this.faceBones.concat(this.bodyBones);
         this.secondaryBones = [];
@@ -461,26 +464,26 @@ export class Skeleton {
         this.boneGroups = {
             'torso': [
                 this.bLeftShoulderRightShoulder,
-                this.bRightShoulderRightHip,
-                this.bLeftHipRightHip,
-                this.bLeftShoulderLeftHip,
+            //     this.bRightShoulderRightHip,
+            //     this.bLeftHipRightHip,
+            //     this.bLeftShoulderLeftHip,
             ],
-            'leftLeg': [
-                this.bLeftHipLeftKnee,
-                this.bLeftKneeLeftAnkle,
-            ],
-            'rightLeg': [
-                this.bRightHipRightKnee,
-                this.bRightKneeRightAnkle
-            ],
-            'leftArm': [
-                this.bLeftShoulderLeftElbow,
-                this.bLeftElbowLeftWrist,
-            ],
-            'rightArm': [
-                this.bRightElbowRightWrist,
-                this.bRightShoulderRightElbow,
-            ],
+            // 'leftLeg': [
+            //     this.bLeftHipLeftKnee,
+            //     this.bLeftKneeLeftAnkle,
+            // ],
+            // 'rightLeg': [
+            //     this.bRightHipRightKnee,
+            //     this.bRightKneeRightAnkle
+            // ],
+            // 'leftArm': [
+            //     this.bLeftShoulderLeftElbow,
+            //     this.bLeftElbowLeftWrist,
+            // ],
+            // 'rightArm': [
+            //     this.bRightElbowRightWrist,
+            //     this.bRightShoulderRightElbow,
+            // ],
             'face': this.faceBones,
         };
 
@@ -491,6 +494,9 @@ export class Skeleton {
                     this.bRightJaw2RightJaw3.kp0.position, part.position);
             });
         });
+
+        this.currentFaceScale = this.getTotalBoneLength(this.faceBones) / this.faceLen0;
+        this.currentBodyScale = this.getTotalBoneLength(this.bodyBones) / this.bodyLen0;
     }
 
     update(pose, face) {
@@ -507,13 +513,21 @@ export class Skeleton {
 
         // Update bones.
         this.bones.forEach(bone => {
+            console.log(bone.name);
             let part0 = this.parts[bone.kp0.name];
             let part1 = this.parts[bone.kp1.name];
             bone.kp0.currentPosition = part0.position;
             bone.kp1.currentPosition = part1.position;
             bone.score = (part0.score + part1.score) / 2;
             bone.latestCenter = bone.kp1.currentPosition.add(bone.kp0.currentPosition).divide(2);
+            if (bone.name == 'leftShoulder-rightShoulder') {
+                let truePosition = this.parts['jawMid'].position.y - this.neckLength * this.currentFaceScale;
+                console.log(truePosition);
+                bone.kp0.currentPosition.y = truePosition;
+                bone.kp1.currentPosition.y = truePosition;
+            }
         });
+
         // Update secondary bones.
         let nosePos = this.bNose3Nose4.kp1.currentPosition;
         this.secondaryBones.forEach(bone => {
